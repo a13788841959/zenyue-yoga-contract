@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// 合同状态
+enum ContractStatus {
+  PENDING   // 待签署
+  SIGNED    // 已签署
+  EXPIRED   // 已过期
+  CANCELLED // 已取消
+}
+
+// 电子合同主表
+model Contract {
+  id             String         @id @default(cuid())
+  contractNo     String         @unique   // 合同编号，如 ZY-20250101-8463
+  status         ContractStatus @default(PENDING)
+
+  // 客户信息
+  customerName      String
+  customerPhone     String
+  customerIdCard    String
+  customerWechat    String    @default("")
+  emergencyContact  String    @default("")
+  emergencyPhone    String    @default("")
+
+  // 课程信息
+  courseName     String    @default("身材管理私教定制课程")
+  courseSessions Int       @default(50)
+  courseAmount   Decimal   @db.Decimal(10, 2)  // 9680.00
+  purchaseDate   DateTime  @default(now())
+  expireDate     DateTime  // 购买日期 + 12个月
+
+  // 签署信息
+  signedAt       DateTime?
+  signIp         String?
+  signUserAgent  String?
+
+  // 文件 URL (Supabase Storage)
+  signatureUrl      String?   // 乙方手写签名图片
+  staffSignatureUrl String?   // 甲方签名图片（可选）
+  idCardFrontUrl    String?   // 身份证正面
+  idCardBackUrl     String?   // 身份证背面
+
+  // 备注
+  notes          String?
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([status])
+  @@index([customerPhone])
+  @@index([createdAt])
+  @@map("contracts")
+}
