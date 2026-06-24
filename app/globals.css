@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-primary: #c8841a;
+  --brand-dark: #5c3614;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Print styles for contract ── */
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  body { background: white !important; }
+  .contract-paper {
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+  }
+}
+
+/* ── Signature canvas ── */
+.signature-canvas {
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* ── Contract content typography ── */
+.contract-body {
+  line-height: 1.9;
+  font-size: 14px;
+}
+.contract-body h3 {
+  font-weight: 700;
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+}
+.contract-body p {
+  margin-bottom: 0.6em;
+  text-indent: 2em;
+}
+.contract-body .no-indent {
+  text-indent: 0;
+}
+
+/* ── Mobile-friendly tap targets ── */
+@layer utilities {
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
